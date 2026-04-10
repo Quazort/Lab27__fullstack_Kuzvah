@@ -38,5 +38,29 @@ Price: id * 99.99m,
 Instock: id % 2 == 0)
 );
 
+app.Use(async (context, next) => {
+    Console.WriteLine($"[LOG] {context.Request.Method}{context.Request.Path}");
+    await next(context);
+    Console.WriteLine($"[LOG] ОТвет отправлен: {context.Response.StatusCode}");
+});
+
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Powered-By", "aspnet core lab27");
+    await next(context);
+});
+
+// app.Use(async (context, next) =>
+// {
+//     var key = context.Request.Query["key"];
+//     if(key != "bublik")
+//     {
+//         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+//         return "Error";
+//     }
+    
+// });
+
+
 app.Run();
 record Product(int Id, string Name, decimal Price, bool Instock);
